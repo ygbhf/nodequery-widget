@@ -1,0 +1,1 @@
+Make sure that this file is writeable by PHP.
