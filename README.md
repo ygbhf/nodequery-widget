@@ -11,7 +11,7 @@ Make sure the data/ directory is writeable (777) so that the image file can be w
 
 ## Config
 
-Edit conf.json and enter your NodeQuery API key. Optionally enter a default ``server_name`` for if no GET data is supplied to widget.php, and don't forget to change ``secret`` to something unique.
+Open conf.json and add your NodeQuery API key to `api_key`.
 
 ## Using
 
