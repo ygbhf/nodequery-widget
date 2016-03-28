@@ -15,7 +15,7 @@ Edit conf.json and enter your NodeQuery API key. Optionally enter a default ``se
 
 ## Using
 
-```<img src="http://yourwebsite.com/status/widget.php?server=*your_nodequery_server_name*"/>```
+```<img src="http://yourwebsite.com/status/widget.php?server=YOUR_NODEQUERY_SERVER_NAME"/>```
 
 #### Example Output
 
