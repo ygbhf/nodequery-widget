@@ -15,4 +15,4 @@ Edit conf.json and enter your NodeQuery API key. Optionally enter a default ``se
 
 ### Example Output
 
-![Example](http://i.imgur.com/xGLkDW7.png"
+![Example](http://i.imgur.com/xGLkDW7.png)
