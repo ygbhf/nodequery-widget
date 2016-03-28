@@ -10,48 +10,64 @@ if ($next_update == false)
 
 if ($next_update > time())
 {
-	$im = @imagecreatefrompng("data/image.png");
+	$image = @imagecreatefrompng("data/image.png");
 	
-	if ($im)
+	if ($image)
 	{
-		imagepng($im);
-		imagedestroy($im);
+		imagepng($image);
+		imagedestroy($image);
 	}
 	
 	return;
 }
 
 $config = json_decode(file_get_contents("conf.json"), true);
-$server_name = $config["server_name"];
+$serverName = $config["server_name"];
+$targetURL = "https://nodequery.com/api/servers?api_key=" . $config["api_key"];
 
 if (isset($_GET["server"]))
 {
-	$server_name = $_GET["server"];
+	$serverName = $_GET["server"];
 }
 
-$url = "https://nodequery.com/api/servers?api_key=" . $config["api_key"];
+// Retrieve the server list from NodeQuery.
+$curl = curl_init();
+	curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+	curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($curl, CURLOPT_BINARYTRANSFER,1);
+	curl_setopt($curl, CURLOPT_URL, $targetURL);
 
-$ch = curl_init();
+	$result = json_decode(curl_exec($curl), true);
+curl_close($curl);
 
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_BINARYTRANSFER,1);
-curl_setopt($ch, CURLOPT_URL, $url);
+// Set the environment variable for GD.
+putenv('GDFONTPATH=' . realpath('.'));
 
-$result = json_decode(curl_exec($ch), true);
+$image = imagecreatetruecolor(250, 80);
+$fontName = "Roboto-Regular";
+$statusText = "Status: " . $result["status"];
 
-curl_close($ch);
+// Define a set of colors for use with this script.
+$redColor = imagecolorallocate($image, 233, 14, 91);
+$greenColor = imagecolorallocate($image, 15, 233, 32);
+$whiteColor = imagecolorallocate($image, 255, 255, 255);
 
-$im = imagecreatetruecolor(300, 150);
-$text_color = imagecolorallocate($im, 233, 14, 91);
-$font_id = 5;
+imagettftext($image, 14, 0, 16, 28, $whiteColor, $fontName, $serverName);
 
-imagestring($im, $font_id, 32, 32,  'Status: ' . $result["status"], $text_color);
+if ($result["status"] == "OK")
+{
+	imagettftext($image, 14, 0, 16, 62, $greenColor, $fontName, $statusText);
+}
+else
+{
+	imagettftext($image, 14, 0, 16, 62, $redColor, $fontName, $statusText);
+}
 
-imagepng($im, "data/image.png");
-imagepng($im);
-imagedestroy($im);
+// Output the PNG image and free up memory.
+imagepng($image, "data/image.png");
+imagepng($image);
+imagedestroy($image);
 
-file_put_contents("data/update.txt", time() + 30);
+//file_put_contents("data/update.txt", time() + 30);
 ?>
