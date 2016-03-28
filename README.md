@@ -2,16 +2,20 @@
 
 ### Setup
 
-Make sure the data/ directory is writeable (777)
+Make sure the data/ directory is writeable (777) so that the image file can be written to.
 
-## Config
-
-Edit conf.json and enter your NodeQuery API key. Optionally enter a default ``server_name`` for if no GET data is supplied to widget.php, and don't forget to change ``secret`` to something unique.
-
-### ImageMagick
+#### ImageMagick
 
 ```apt-get install php5-imagick```  
 ```php5enmod imagick```
+
+### Config
+
+Edit conf.json and enter your NodeQuery API key. Optionally enter a default ``server_name`` for if no GET data is supplied to widget.php, and don't forget to change ``secret`` to something unique.
+
+### Using
+
+```<img src="http://yourwebsite.com/status/widget.php?server=your_nodequery_server_name"/>```
 
 ### Example Output
 
