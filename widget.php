@@ -5,7 +5,7 @@ $font_id = 5;
 
 imagestring($im, $font_id, 32, 32,  'A Simple Text String', $text_color);
 
-header('Content-Type: image/jpeg');
+header('Content-Type: image/png');
 
 imagepng($im);
 
