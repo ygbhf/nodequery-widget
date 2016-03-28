@@ -69,5 +69,5 @@ imagepng($image, "data/image.png");
 imagepng($image);
 imagedestroy($image);
 
-//file_put_contents("data/update.txt", time() + 30);
+file_put_contents("data/update.txt", time() + 30);
 ?>
