@@ -1,12 +1,13 @@
 <?php
-$im = imagecreatetruecolor(120, 20);
+$im = imagecreatetruecolor(300, 150);
 $text_color = imagecolorallocate($im, 233, 14, 91);
+$font_id = 5;
 
-imagestring($im, 1, 5, 5,  'A Simple Text String', $text_color);
+imagestring($im, $font_id, 32, 32,  'A Simple Text String', $text_color);
 
 header('Content-Type: image/jpeg');
 
-imagejpeg($im);
+imagepng($im);
 
 imagedestroy($im);
 ?>
