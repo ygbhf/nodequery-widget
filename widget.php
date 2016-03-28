@@ -1,20 +1,27 @@
 <?php
 header('Content-Type: image/png');
 
-$config = json_decode(file_get_contents("conf.json"), true);
-$secretFile = "data/". $config["secret"] . ".dat";
-$updateFile = "data/update.txt";
-$serverData = file_get_contents($secretFile);
-$nextUpdate = file_get_contents($updateFile);
+/* Require NodeQuery Libraries */
+require_once("nodequery/Server.php");
+require_once("nodequery/Client.php");
+require_once("nodequery/Request.php");
 
-if ($nextUpdate == false || $serverData == false)
-{
-	$nextUpdate = time();
-}
+/* Require Widget Classes */
+require_once("class/WidgetConfig.php");
+require_once("class/WidgetDatabase.php");
+
+$config = new WidgetConfig("conf.json");
+$database = new WidgetDatabase($config->get("database"));
+
+$database->add("servers", "");
+$database->add("next_update", time());
+
+$imageFileName = $config->get("image_file");
+$nextUpdate = $database->get("next_update");
 
 if ($nextUpdate > time())
 {
-	$image = @imagecreatefrompng("data/image.png");
+	$image = @imagecreatefrompng($imageFileName);
 	
 	if ($image)
 	{
@@ -25,43 +32,17 @@ if ($nextUpdate > time())
 	return;
 }
 
-$serverName = $config["server_name"];
-$targetURL = "https://nodequery.com/api/servers?api_key=" . $config["api_key"];
+$serverName = $config->serverName;
+$nodequery = new NodeQuery\Client($config->get("api_key"));
+$servers = $nodequery->servers();
 
-if (isset($_GET["server"]))
-{
-	$serverName = $_GET["server"];
-}
-
-if ($serverName == false || $serverName == "")
-{
-	$serverName = "unknown.server.com";
-}
-
-// Retrieve the server list from NodeQuery.
-$curl = curl_init();
-	curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-	curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-	curl_setopt($curl, CURLOPT_BINARYTRANSFER,1);
-	curl_setopt($curl, CURLOPT_URL, $targetURL);
-
-	$serverData = curl_exec($curl);
-curl_close($curl);
-
-// Write the server data to our secret file.
-file_put_contents($secretFile, $serverData);
-file_put_contents($updateFile, time() + 30);
-
-// Decode the server data into a JSON object.
-$serverData = json_decode($serverData, true);
+$database->set("next_update", time() + $config->get("interval"));
+$database->save();
 
 // Set the environment variable for GD.
 putenv('GDFONTPATH=' . realpath('.'));
 
-$fontName = "Roboto-Regular";
-
-foreach ($serverData["data"][0] as $server)
+foreach ($servers["data"][0] as $server)
 {
 	if ($server["name"] == $serverName)
 	{
@@ -111,10 +92,10 @@ function FormatBytes($bytes, $precision = 2)
 
 // Create the canvas by loading in our background image.
 $canvas = new Imagick();
-$canvas->readImage('background.png'); 
+$canvas->readImage($config->get("background")); 
 
 $draw = new ImagickDraw();
-$draw->setFont('Roboto-Regular.ttf');
+$draw->setFont($config->get("main_font"));
 $draw->setFontSize(16);
 $draw->setStrokeAntialias(true);
 $draw->setTextAntialias(true);
@@ -123,7 +104,7 @@ $metrics = DrawText($canvas, $draw, $canvas->getImageWidth() / 2, 10, $serverNam
 
 $draw->setFontSize(14);
 
-if ($serverObject)
+if (isset($serverObject))
 {
 	if ($serverObject["status"] == "active")
 	{
@@ -146,7 +127,7 @@ else
 
 $canvas->drawImage($draw);
 $canvas->setImageFormat('png');
-$canvas->writeImage("data/image.png");
+$canvas->writeImage($imageFileName);
 
 /* Clean the output buffer before rendering. */
 ob_clean();
