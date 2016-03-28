@@ -1,1 +1,1 @@
-Make sure that this file is writeable by PHP.
+Make sure that this directory is writeable by PHP.
