@@ -21,14 +21,7 @@ $nextUpdate = $database->get("next_update");
 
 if ($nextUpdate > time())
 {
-	$image = @imagecreatefrompng($imageFileName);
-	
-	if ($image)
-	{
-		imagepng($image);
-		imagedestroy($image);
-	}
-	
+	readfile($imageFileName);
 	return;
 }
 

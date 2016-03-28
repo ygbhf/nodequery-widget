@@ -1,7 +1,7 @@
 {
 	"api_key": "",
 	"server_name": "",
-	"interval": "10",
+	"interval": "120",
 	"image_file": "data/image.png",
 	"database": "data/database.db",
 	"background": "assets/background.png",
