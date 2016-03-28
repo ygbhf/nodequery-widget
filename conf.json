@@ -1,4 +1,5 @@
 {
-	"api_key":""
-	"server_name":""
+	"api_key":"",
+	"server_name":"",
+	"secret":"a_secret_key"
 }
