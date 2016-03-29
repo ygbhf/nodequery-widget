@@ -1,7 +1,8 @@
 {
-	"api_key": "",
+	"api_key": "x7fF6GvWMllsu7IDbM9e4dsv7VMzBYB37kq7AYoU7jztlwDd",
 	"server_name": "",
 	"interval": "120",
+	"theme_class": "ram_cpu_tall",
 	"image_file": "data/image.png",
 	"database": "data/database.db",
 	"background": "assets/background.png",
