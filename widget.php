@@ -17,22 +17,22 @@ $database = new WidgetDatabase($config->get("database"));
 /* Require Theme Class */
 require_once("themes/" . $config->themeClass . ".php");
 
-$database->add("servers", "");
-$database->add("next_update", time());
+$identifier = md5($config->themeClass . ":" . $config->serverName);
+$database->add($identifier, time());
 
-$imageFileName = $config->get("image_file");
-$nextUpdate = $database->get("next_update");
+$nextUpdate = $database->get($identifier);
+$fileName = "data/" . $identifier . ".png";
 
 if ($nextUpdate > time())
 {
-	readfile($imageFileName);
+	readfile($fileName);
 	return;
 }
 
 $nodequery = new NodeQuery\Client($config->get("api_key"));
 $servers = $nodequery->servers();
 
-$database->set("next_update", time() + $config->get("interval"));
+$database->set($identifier, time() + $config->get("interval"));
 $database->save();
 
 // Set the environment variable for GD.
@@ -49,7 +49,7 @@ foreach ($servers["data"][0] as $data)
 $theme = new $config->themeClass();
 $theme->render($server, $config, $database);
 $theme->canvas->setImageFormat('png');
-$theme->canvas->writeImage($imageFileName);
+$theme->canvas->writeImage($fileName);
 
 /* Clean the output buffer before rendering. */
 ob_clean();
