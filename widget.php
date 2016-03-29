@@ -9,12 +9,12 @@ require_once("nodequery/Request.php");
 /* Require Widget Classes */
 require_once("class/WidgetConfig.php");
 require_once("class/WidgetDatabase.php");
+require_once("class/BaseTheme.php");
 
 $config = new WidgetConfig("conf.json");
 $database = new WidgetDatabase($config->get("database"));
 
-/* Require Theme Classes */
-require_once("themes/BaseTheme.php");
+/* Require Theme Class */
 require_once("themes/" . $config->themeClass . ".php");
 
 $database->add("servers", "");

@@ -5,6 +5,5 @@
 	"theme_class": "ram_cpu_tall",
 	"image_file": "data/image.png",
 	"database": "data/database.db",
-	"background": "assets/background.png",
 	"main_font": "assets/Roboto-Regular.ttf"
 }

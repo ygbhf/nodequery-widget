@@ -10,7 +10,7 @@ class ram_cpu_tall extends BaseTheme
 
 		// Create the canvas by loading in our background image.
 		$this->canvas = new Imagick();
-		$this->canvas->readImage($config->get("background")); 
+		$this->canvas->readImage("themes/ram_cpu_tall/background.png"); 
 
 		$this->draw = new ImagickDraw();
 		$this->draw->setFont($config->get("main_font"));
