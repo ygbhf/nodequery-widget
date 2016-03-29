@@ -8,10 +8,18 @@ class ram_cpu_short extends BaseTheme
 		$greenColor = new ImagickPixel('#7AC902');
 		$whiteColor = new ImagickPixel('#FFFFFF');
 		$greyColor = new ImagickPixel('#4A4A4A');
-
+		
 		// Create the canvas by loading in our background image.
 		$this->canvas = new Imagick();
-		$this->canvas->readImage("themes/ram_cpu_short/background.png"); 
+		
+		if (isset($_GET["background"]))
+		{
+			$this->canvas->readImage("themes/ram_cpu_short/" . escapeshellcmd($_GET["background"]) . ".png");
+		}
+		else
+		{
+			$this->canvas->readImage("themes/ram_cpu_short/background.png");
+		}
 
 		$this->draw = new ImagickDraw();
 		$this->draw->setFont($config->get("main_font"));
