@@ -1,8 +1,8 @@
 {
 	"api_key": "iuA2sOV2qfYrR3KwJU3HY3ggHtDvVLhgXaC251q2Jjazs7B4",
-	"server_name": "",
+	"server_name": "CP",
 	"interval": "120",
-	"theme_class": "ram_cpu_tall",
+	"theme_class": "ram_cpu_short",
 	"database": "data/database.db",
 	"main_font": "assets/Roboto-Regular.ttf"
 }
